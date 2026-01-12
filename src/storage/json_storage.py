@@ -81,13 +81,12 @@ def delete_json_output_file():
     print(f"File: {json_file_name} at path: '{json_file_path}' deleted ✅.")
 
 
-def show_first_n_log_entries(entries_amount):
+def show_first_n_json_log_entries(entries_amount):
     if entries_amount < 1:
         print("Amount of entries cannot be less than 1.")
         return
 
     count = 0
-    entry_counter = 0
 
     if not check_if_json_output_exists():
         return
@@ -95,21 +94,19 @@ def show_first_n_log_entries(entries_amount):
     try:
         with open(file=json_file_path, mode='r') as json_file:
             for line in json_file:
-                entry_counter += 1
-
+                count += 1
 
     except PermissionError:
         print(f"Dont have permission to read file: '{json_file_name}' at path: '{json_file_path}'.")
-
     except json.decoder.JSONDecodeError:
         print(f"Could not decode JSON from file '{json_file}'. Check the file format.")
-
     except Exception as e:
         print(e)
 
-    if entries_amount > entry_counter:
-        print(f"We only have {entry_counter} entries in total. Displaying all the entries that we have...")
-        entries_amount = entry_counter
+    if entries_amount > count:
+        print(f"We only have {count} entries in total. Displaying all the entries that we have...")
+        entries_amount = count
+    count = 0
 
     try:
         with open(file=json_file_path, mode='r') as json_file:
@@ -125,10 +122,8 @@ def show_first_n_log_entries(entries_amount):
 
     except PermissionError:
         print(f"Dont have permission to read file: '{json_file_name}' at path: '{json_file_path}'.")
-
     except json.decoder.JSONDecodeError:
         print(f"Could not decode JSON from file '{json_file}'. Check the file format.")
-
     except Exception as e:
         print(e)
 
@@ -141,5 +136,22 @@ def format_raw_jsonl_entry(formatted_jsonl_entry, count):
           f"Url: {formatted_jsonl_entry['url']}\n"
           f"Explanation: {formatted_jsonl_entry['explanation']}\n"
           f"Logged_At: {formatted_jsonl_entry['logged_at']}")
+
+
+show_first_n_json_log_entries(4)
+
+def fetch_most_recent_json_apod():
+    pass
+
+
+def fetch_oldest_json_apod():
+    pass
+
+
+def show_all_json_entries():
+    pass
+
+
+
 
 
