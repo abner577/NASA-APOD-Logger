@@ -1,7 +1,9 @@
 from pathlib import Path
 import csv
-from data_storage import DIR_PATH
+from src.utils.csv_utils import *
 from src.utils.data_utils import *
+
+DIR_PATH = "C://Users/joser/PycharmProjects/NASA-APOD-Logger"
 
 HEADERS = {
     "date": "",
@@ -13,14 +15,6 @@ HEADERS = {
 
 csv_file_path = f"{DIR_PATH}/data/output.csv"
 csv_file_name = "output.csv"
-
-def check_if_csv_output_exists():
-    if Path(csv_file_path).exists() and Path(csv_file_path).is_file():
-        print(f"File: '{csv_file_name}' at path: '{csv_file_path}' found ✅")
-        return True
-
-    print(f"File: '{csv_file_name}' at path: '{csv_file_path}' does not exist ❌. Create it before proceeding...")
-    return False
 
 
 def create_csv_output_file():
@@ -49,28 +43,6 @@ def log_data_to_csv(formatted_apod_data):
         print(f"Dont have permission to write to file: '{csv_file_name}' at path: '{csv_file_path}' ❌")
     except Exception as e:
         print(e)
-
-
-def check_for_duplicate_csv_entries(formatted_apod_data):
-    try:
-        with open(file=csv_file_path, mode='r', encoding='utf-8') as csv_file:
-           content = csv.reader(csv_file)
-
-           for row in content:
-              if not row or row[0] == 'date':
-                  continue
-
-              if row[0] == formatted_apod_data['date']:
-                   print(f"APOD with date: '{formatted_apod_data['date']}' found in: '{csv_file_name}'. Not logging again ⛔")
-                   return True
-
-    except PermissionError:
-        print(f"Dont have permission to read file: '{csv_file_name}' at path: '{csv_file_path}'.")
-    except Exception as e:
-        print(e)
-
-    return False
-
 
 def clear_csv_output_file():
     try:
@@ -104,28 +76,14 @@ def show_first_n_csv_log_entries(entries_amount):
         print("Amount of entries cannot be less than 1 ❌")
         return
 
-    count = 0
-
     if not check_if_csv_output_exists():
         return
 
-    try:
-        with open(file=csv_file_path, mode='r', encoding='utf-8') as csv_file:
-            content = csv.reader(csv_file)
-            for row in content:
-                if not row or row[0] == 'date':
-                    continue
+    line_count = get_line_count(count=0)
 
-                count += 1
-
-    except PermissionError:
-        print(f"Dont have permission to read file: '{csv_file_name}' at path: '{csv_file_path}'.")
-    except Exception as e:
-        print(e)
-
-    if entries_amount > count:
-        print(f"We only have {count} entries in total. Displaying all the entries that we have...")
-        entries_amount = count
+    if entries_amount > line_count:
+        print(f"We only have {line_count} entries in total. Displaying all the entries that we have...")
+        entries_amount = line_count
     count = 0
 
     try:
@@ -148,22 +106,57 @@ def show_first_n_csv_log_entries(entries_amount):
         print(e)
 
 
-def format_raw_csv_entry(formatted_csv_entry, count):
-    print(f"=====================================")
-    print(f"Entry #{count + 1} ({formatted_csv_entry[1]}):")
-    print(f"Date: {formatted_csv_entry[0]}\n"
-          f"Title: {formatted_csv_entry[1]}\n"
-          f"Url: {formatted_csv_entry[2]}\n"
-          f"Explanation: {formatted_csv_entry[3]}\n"
-          f"Logged_At: {formatted_csv_entry[4]}")
+def show_last_n_csv_log_entries(entries_amount):
+    entries_list = []
 
-show_first_n_csv_log_entries(1)
+    if entries_amount < 1:
+        print("Amount of entries cannot be less than 1 ❌")
+        return
+
+    if not check_if_csv_output_exists():
+        return
+
+    line_count = get_line_count(count=0)
+
+    if entries_amount > line_count:
+        print(f"We only have {line_count} entries in total. Displaying all the entries that we have...")
+        entries_amount = line_count
+    count = 0
+
+    try:
+        with open(file=csv_file_path, mode='r', encoding='utf-8') as csv_file:
+            content = csv.reader(csv_file)
+
+            for row in content:
+                if not row or row[0] == 'date':
+                    continue
+
+                entries_list.append(row)
+                count += 1
+
+                if count > entries_amount:
+                    entries_list.remove(entries_list[0])
+                    count -= 1
+
+
+    except PermissionError:
+        print(f"Dont have permission to read file: '{csv_file_name}' at path: '{csv_file_path}'.")
+    except Exception as e:
+        print(e)
+
+    count = 0
+    for entry in entries_list:
+        format_raw_csv_entry(entry, count)
+        count += 1
 
 def fetch_most_recent_csv_apod():
     pass
 
+
 def fetch_oldest_csv_apod():
     pass
 
+
 def show_all_csv_entries():
     pass
+

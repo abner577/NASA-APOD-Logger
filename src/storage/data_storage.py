@@ -1,5 +1,4 @@
 from pathlib import Path
-from src.utils.data_utils import *
 
 DIR_PATH = "C://Users/joser/PycharmProjects/NASA-APOD-Logger"
 

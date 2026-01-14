@@ -2,7 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
-from storage.data_storage import *
+from src.storage.data_storage import *
 from src.storage.csv_storage import *
 from src.storage.json_storage import *
 from src.utils.browser_utils import *
@@ -21,7 +21,6 @@ def get_todays_apod():
     full_url = f"{BASE_URL}?api_key={NASA_API_KEY}"
     print(full_url)
     response = requests.get(full_url)
-    print(response)
 
     if response.status_code == 200:
         print("Today's apod was successfully retrieved! 🚀")
@@ -34,13 +33,10 @@ def get_todays_apod():
             create_data_directory()
 
         print("Writing data to csv... 🗄️")
-        log_data_to_csv()
 
         print("Writing to json... 🗃️")
-        log_data_to_json()
 
         print("Redirecting user...")
-        take_user_to_browser()
 
         return apod_data
 

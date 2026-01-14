@@ -106,6 +106,9 @@ def show_last_n_json_log_entries(entries_amount):
     try:
         with open(file=json_file_path, mode='r') as json_file:
             for line in json_file:
+                if line is None or len(line) == 0:
+                    continue
+
                 content = json.loads(line)
                 entries_list.append(content)
                 count += 1
@@ -113,7 +116,6 @@ def show_last_n_json_log_entries(entries_amount):
                 if count > entries_amount:
                     entries_list.remove(entries_list[0])
                     count -= 1
-
 
     except PermissionError:
         print(f"Dont have permission to read file: '{json_file_name}' at path: '{json_file_path}'.")
@@ -139,4 +141,4 @@ def fetch_oldest_json_apod():
 def show_all_json_entries():
     pass
 
-
+show_last_n_json_log_entries(2)
