@@ -69,52 +69,42 @@ def get_apod_for_specific_day():
                     day = int(input("Enter a day (DD): "))
 
                     date_object = datetime.date(year, month, day)
-                    date_today = datetime.date.today()
+                    check_result = check_valid_nasa_date(date_object)
 
-                    if date_object < NASA_APOD_START_DATE:
-                        print("⚠️ Please enter a date after June 16, 1995")
-                    elif date_object > date_today:
-                        print(f"⚠️ Please enter a date before {date_today}")
-                    else:
-                        full_url = f"{BASE_URL}?api_key={NASA_API_KEY}&date={date_object}"
-                        print(f"Retrieving {date_object}'s APOD...")
-                        response = requests.get(full_url)
+                    # If an invalid date is entered, try again
+                    if check_result is not None:
+                        print(check_result)
+                        continue
 
-                        if response.status_code == 200:
+                    if not check_if_data_exists():
+                        print('Data directory not found. Creating Data Directory...')
+                        create_data_directory()
+
+                    # Valid date at this point
+                    full_url = f"{BASE_URL}?api_key={NASA_API_KEY}&date={date_object}"
+                    print(f"Retrieving {date_object}'s APOD...")
+                    response = requests.get(full_url)
+
+                    if response.status_code == 200:
                             print("APOD was successfully retrieved! 🚀\n")
                             apod_data = response.json()
                             apod_data = format_apod_data(apod_data)
 
-                            if check_if_data_exists():
+                            print("Writing data to csv... 🗄️")
+                            log_data_to_csv(apod_data)
 
-                                print("Writing data to csv... 🗄️")
-                                log_data_to_csv(apod_data)
+                            print("Writing to json... 🗃️")
+                            log_data_to_json(apod_data)
 
-                                print("Writing to json... 🗃️")
-                                log_data_to_json(apod_data)
-
-                                print(f"Taking user to url: {apod_data['url']}")
-                                take_user_to_browser()
+                            print(f"Taking user to url: {apod_data['url']}")
+                            take_user_to_browser()
 
 
-                            else:
-                                print("Data directory doesnt exist ❌. Creating Data Directory... ")
-                                create_data_directory()
+                    elif response.status_code == 404 or response.status_code == 403:
+                        print("🚫 This is a user error. Check your API key and try again.")
 
-                                print("Writing data to csv... 🗄️")
-                                log_data_to_csv(apod_data)
-
-                                print("Writing to json... 🗃️")
-                                log_data_to_json(apod_data)
-
-                                print(f"Taking user to url: {apod_data['url']}")
-                                take_user_to_browser()
-
-                        elif response.status_code == 404 or response.status_code == 403:
-                            print("🚫 This is a user error. Check your API key and try again.")
-
-                        elif response.status_code == 500 or response.status_code == 503 or response.status_code == 504:
-                            print("⚠️ This is a server error. Try again later.")
+                    elif response.status_code == 500 or response.status_code == 503 or response.status_code == 504:
+                        print("⚠️ This is a server error. Try again later.")
 
                 case 2:
                     print("Exiting...")
@@ -122,6 +112,8 @@ def get_apod_for_specific_day():
 
         except Exception as e:
                 print(e)
-    return None
 
-get_apod_for_specific_day()
+
+def get_random_n_apods():
+    pass
+

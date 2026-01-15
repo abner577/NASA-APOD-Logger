@@ -2,6 +2,7 @@
 from src.storage.data_storage import DIR_PATH
 from src.utils.json_utils import *
 from src.utils.data_utils import *
+from src.utils.date_utils import check_valid_nasa_date
 
 json_file_path = f"{DIR_PATH}/data/output.jsonl"
 json_file_name = "output.jsonl"
@@ -169,12 +170,12 @@ def delete_one_json_entry():
     day = int(input("Enter a day (DD): "))
 
     date_object = datetime.date(year, month, day)
-    date_today = datetime.date.today()
 
-    if date_object < NASA_APOD_START_DATE:
-        print("⚠️ Please enter a date after June 16, 1995")
-    elif date_object > date_today:
-        print(f"⚠️ Please enter a date before {date_today}")
+    check_result = check_valid_nasa_date(date_object)
+
+    if check_result is not None:
+        print(check_result)
+        return
 
     found = False
     target_date = date_object.isoformat()
@@ -220,3 +221,8 @@ def fetch_most_recent_json_apod():
 
 def fetch_oldest_json_apod():
     pass
+
+
+def log_multiple_entries():
+    pass
+
