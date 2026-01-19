@@ -40,21 +40,24 @@ def log_data_to_json(formatted_apod_data):
     """
 
     if not check_if_json_output_exists():
-        return
+        return None
 
     if check_for_duplicate_json_entries(formatted_apod_data):
-        return
+        return "Duplicate found."
 
     try:
         with open(file=json_file_path, mode='a', encoding='utf-8') as json_file:
             # One JSON object per line so we can safely append.
             # Need to use .dumps to write JSON as a string
             json_file.write(json.dumps(formatted_apod_data, ensure_ascii=False) + "\n")
+            print(f"Successfully logged APOD from: '{formatted_apod_data['date']}' to {json_file_name} ✅")
 
     except PermissionError:
         print(f"Dont have permission to write to file: '{json_file_name}' at path: '{json_file_path}'.")
     except Exception as e:
         print(e)
+
+    return None
 
 
 def clear_json_output_file():
