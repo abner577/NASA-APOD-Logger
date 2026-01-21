@@ -1,3 +1,5 @@
+from src.nasa_client import *
+
 
 def startup_banner():
     print(r"""                       _      _                             
@@ -44,4 +46,81 @@ def startup_art():
 ...........................................-==+******++=-:.......................-=+*%@@@@@@@@@@@=..
 .......................................................................................:-==++++=:...
 ....................................................................................................""")
+
+
+def nasa_apods_menu():
+    flag = True
+    while flag:
+        print('======================= Welcome to the Interacting with NASA Menu =======================\n'
+              'Pick an option (1-4):')
+        try:
+
+            user_choice = int(input("1. Get todays APOD\n"
+                                    "2. Get APOD for a specific date\n"
+                                    "3. Get a random N amount of APODS\n"
+                                    "4. Quit\n"))
+
+        except ValueError:
+            print("Please enter a number (1-4).")
+        except Exception as e:
+            print(e)
+
+        match user_choice:
+            case 1:
+                get_todays_apod()
+
+            case 2:
+                get_apod_for_specific_day()
+
+            case 3:
+                get_random_n_apods()
+
+            case 4:
+                print("Exiting Interacting with NASA Menu...")
+                flag = False
+
+
+def output_files_menu():
+    flag = True
+    while flag:
+        print('======================= Welcome to the Output Files Menu =======================\n'
+              'Pick an option (1-4):')
+        try:
+            user_choice = int(input("1. Show first n log entries\n"
+                                    "2. Show last n log entries\n"
+                                    "3. Show all entries\n"
+                                    "4. Delete one entry\n"
+                                    "5. Fetch most recent entry (by date not logged by)\n"
+                                    "6. Fetch oldest entry (by date not logged by)\n"
+                                    "7. Exit Output Files Menu\n"))
+
+        except ValueError:
+            print("Please enter a number (1-4).")
+            return
+        except Exception as e:
+            print(e)
+            return
+
+        match user_choice:
+            case 1:
+                show_first_n_json_log_entries()
+
+            case 2:
+                show_last_n_json_log_entries()
+
+            case 3:
+                show_all_json_entries()
+
+            case 4:
+                delete_one_json_entry()
+
+            case 5:
+                fetch_most_recent_json_apod()
+
+            case 6:
+                fetch_oldest_json_apod()
+
+            case 7:
+                print("Exiting Output Files Menu...")
+                flag = False
 

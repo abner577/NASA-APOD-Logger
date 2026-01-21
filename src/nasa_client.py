@@ -79,7 +79,6 @@ def get_apod_for_specific_day():
     """
     flag = True
     while flag:
-        print("\n================== GET APOD MENU 🛰️==================")
 
         # Catch non-numeric input here (e.g., "abc")
         try:
@@ -164,7 +163,6 @@ def get_random_n_apods():
     flag = True
     while flag:
         try:
-            print("\n================== GET RANDOM APODS MENU 🛰️==================")
             user_choice = int(input("Enter (1-2) for one of the options below:\n"
                                     "1. Make a request for random APODS\n"
                                     "2. Exit GET random APODS Menu\n"))

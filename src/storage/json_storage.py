@@ -44,7 +44,7 @@ def log_data_to_json(formatted_apod_data):
     return None
 
 
-def show_first_n_json_log_entries(entries_amount):
+def show_first_n_json_log_entries():
     """
         Display the first N logged JSONL entries.
 
@@ -54,6 +54,16 @@ def show_first_n_json_log_entries(entries_amount):
         Returns:
          None:
     """
+
+    try:
+        entries_amount = int(input("Enter the number of log entries you would like to fetch:\n"))
+
+    except ValueError:
+        print("Please enter a valid number.")
+        return
+    except Exception as e:
+        print(e)
+        return
 
     if entries_amount < 1:
         print("Amount of entries cannot be less than 1.")
@@ -92,7 +102,7 @@ def show_first_n_json_log_entries(entries_amount):
         print(e)
 
 
-def show_last_n_json_log_entries(entries_amount):
+def show_last_n_json_log_entries():
     """
     Display the last N logged JSONL entries.
 
@@ -102,6 +112,16 @@ def show_last_n_json_log_entries(entries_amount):
        Returns:
         None:
     """
+
+    try:
+        entries_amount = int(input("Enter the number of log entries you would like to fetch:\n"))
+
+    except ValueError:
+        print("Please enter a valid number.")
+        return
+    except Exception as e:
+        print(e)
+        return
 
     entries_list = []
 
@@ -193,9 +213,17 @@ def delete_one_json_entry():
     if not check_if_json_output_exists():
         pass
 
-    year = int(input("Enter a year (YYYY): "))
-    month = int(input("Enter a month (MM): "))
-    day = int(input("Enter a day (DD): "))
+    try:
+        year = int(input("Enter a year (YYYY): "))
+        month = int(input("Enter a month (MM): "))
+        day = int(input("Enter a day (DD): "))
+
+    except ValueError:
+        print("Please enter a valid number.")
+        return
+    except Exception as e:
+        print(e)
+        return
 
     date_object = datetime.date(year, month, day)
 
@@ -338,4 +366,3 @@ def log_multiple_json_entries(list_formatted_apod_data):
     """
     for entry in list_formatted_apod_data:
         log_data_to_json(entry)
-
