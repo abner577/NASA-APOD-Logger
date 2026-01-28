@@ -7,50 +7,75 @@ Program entry point.
 Responsible for the main menu loop and user interaction flow.
 """
 
-print('Welcome to the APOD Logger.')
-print('Startup Banner & Startup Art Here')
 startup_banner()
-startup_art()
+spaceship_startup_art3()
+print("-----------------------------------------------------------------------------\n")
+
+# Startup checks (create if missing)
+data_dir_status = "Found"
+settings_status = "Found"
+json_status = "Found"
+csv_status = "Found"
 
 if not check_if_data_exists():
     create_data_directory()
+    data_dir_status = "Created"
 
 if not check_if_user_settings_exist():
     create_user_settings()
+    settings_status = "Created"
 
 if not check_if_json_output_exists():
     create_json_output_file()
+    json_status = "Created"
 
 if not check_if_csv_output_exists():
     create_csv_output_file()
-    print()
+    csv_status = "Created"
+
+
+checks_lines = [
+    f"Data directory     [✓] {data_dir_status}",
+    f"JSONL log          [✓] {json_status}",
+    f"CSV log            [✓] {csv_status}",
+    f"User settings      [✓] {settings_status}",
+]
+
+print_box("Startup Checks:", checks_lines)
+print("\nVersion: 1.0.0\n")
+
+# Onboarding block (placeholder for now — conditional logic can be added next)
+# (Get started with — shown only on first launches)
+print("Get started with:")
+print("> Fetch today’s APOD")
+print("> Fetch an APOD by date")
+print("> Browse saved history")
+print("> Toggle auto-open setting")
+
+print("\n-------------------------------------------------------------------------------\n")
 
 # Entry Prompt
 entry_flag = True
 while entry_flag:
-    try:
-        entry_choice = int(input(
-            "[1] Get started\n"
-            "[2] Quit\n\n"
-            "Option: "
-        ))
+    entry_choice = input(
+        "[1] Get started\n"
+        "[Q] Quit\n\n"
+        "Option: "
+    ).strip()
 
-        match entry_choice:
-            case 1:
-                entry_flag = False
-            case 2:
-                print("\nGoodbye 👋")
-                exit()
-            case _:
-                print("Invalid input: Please enter 1 or 2.")
-    except ValueError:
-        print("Invalid input: Please enter 1 or 2.")
+    if entry_choice == "1":
+        entry_flag = False
+    elif entry_choice.lower() == "q":
+        print("\nGoodbye 👋")
+        exit()
+    else:
+        print("Invalid input: Please enter 1 or Q.")
 
 
 # Main Menu
 flag = True
 while flag:
-    print('\n======================= Main Menu ☄️ =======================\n')
+    print("\n======================= Main Menu ☄️ =======================\n")
     increment_launch_count(int(get_launch_count()['launch_count']))
 
     try:
