@@ -138,3 +138,68 @@ def render_spaceship_startup_art_2() -> None:
                 text.append(ch)
 
     console.print(text)
+
+def render_moon_startup_art_1() -> None:
+    char_style_map = {
+        # Suns
+        "O": "sun.primary",
+        "|": "sun.primary",
+        "-": "sun.primary",
+
+        # Stars
+        "*": "star.purple",
+        "o": "star.blue",
+        ".": "star.muted",
+
+        # Moon
+        "_": "moon.body",
+        "~": "moon.body",
+        "`": "moon.body",
+        "\\": "moon.body",
+        "/": "moon.body",
+        "'": "moon.body",
+        "\"": "moon.body",
+        "(": "moon.body",
+        ")": "moon.body",
+        "@": "moon.body",
+
+        # USA letters
+        "U": "nasa.red",
+        "S": "nasa.blue",
+        "A": "nasa.red",
+    }
+
+    lines = MOON_STARTUP_ART1.splitlines()
+    height = len(lines)
+
+    text = Text()
+
+    for row, line in enumerate(lines):
+        if row > 0:
+            text.append("\n")
+
+        width = len(line)
+
+        for col, ch in enumerate(line):
+            # Special positional rule for '|'
+            if ch == "|":
+                left = line[col - 1] if col > 0 else " "
+                right = line[col + 1] if col < width - 1 else " "
+                above = lines[row - 1][col] if row > 0 and col < len(lines[row - 1]) else " "
+                below = lines[row + 1][col] if row < height - 1 and col < len(lines[row + 1]) else " "
+
+                if left == "-" or right == "-" or above == "O" or below == "O":
+                    text.append(ch, style="sun.primary")
+                else:
+                    text.append(ch, style="moon.body")
+
+                continue
+
+            # Normal static mapping
+            style = char_style_map.get(ch)
+            if style:
+                text.append(ch, style=style)
+            else:
+                text.append(ch)
+
+    console.print(text)

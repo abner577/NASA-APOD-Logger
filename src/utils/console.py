@@ -43,6 +43,15 @@ DEEP_SPACE_THEME = Theme({
   "ship.nasa.red": "bold color(160)",
   "ship.nasa.blue": "bold color(39)",
 
+  "sun.primary": "bold color(220)",
+  "star.purple": "color(93)",
+  "star.blue": "color(39)",
+  "star.muted": "dim color(250)",
+  "moon.body": "color(252)",
+  "nasa.red": "bold color(160)",
+  "nasa.blue": "bold color(27)"
+
+
 })
 
 console = Console(theme=DEEP_SPACE_THEME)

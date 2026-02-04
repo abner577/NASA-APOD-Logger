@@ -10,7 +10,7 @@ Responsible for the main menu loop and user interaction flow.
 """
 
 startup_banner2()
-render_spaceship_startup_art_2()
+render_moon_startup_art_1()
 print("\n")
 print("-----------------------------------------------------------------------------\n")
 
