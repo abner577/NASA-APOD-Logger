@@ -181,7 +181,7 @@ def render_moon_startup_art_1() -> None:
         width = len(line)
 
         for col, ch in enumerate(line):
-            # Special positional rule for '|'
+            # Positional rule for '|'
             if ch == "|":
                 left = line[col - 1] if col > 0 else " "
                 right = line[col + 1] if col < width - 1 else " "
@@ -201,5 +201,133 @@ def render_moon_startup_art_1() -> None:
                 text.append(ch, style=style)
             else:
                 text.append(ch)
+
+    console.print(text)
+
+def render_astronaut_startup_art_1() -> None:
+    ground_chars = set("^~'\"")
+
+    lines = ASTRONAUT_STARTUP_ART1.splitlines()
+    total_lines = len(lines)
+
+    # Identify the finial line: the one that contains "<>" (or "< >") near the top
+    finial_row = None
+    for i, line in enumerate(lines[:6]):  # search only near the top to avoid false matches
+        if "<>" in line or "< >" in line:
+            finial_row = i
+            break
+
+    text = Text()
+    flag_stripe_row = 0
+
+    for row, line in enumerate(lines):
+        if row > 0:
+            text.append("\n")
+
+        pole_start = line.find("||")
+        has_flag_cloth = pole_start != -1 and ("=" in line[pole_start:] or ":" in line[pole_start:])
+
+        stripe_style = None
+        if has_flag_cloth and "=" in line[pole_start:]:
+            stripe_style = "flag.stripe.red" if (flag_stripe_row % 2 == 0) else "flag.stripe.white"
+            flag_stripe_row += 1
+
+        is_ground_row = (row == total_lines - 1)
+        is_finial_row = (finial_row is not None and row == finial_row)
+
+        for col, ch in enumerate(line):
+            # --- Positional overrides first ---
+
+            # (1) Ground chars should only be "ground" on the ground row;
+            # otherwise treat them like astronaut body.
+            if ch in ("~", "'", "\""):
+                if is_ground_row:
+                    text.append(ch, style="ground")
+                else:
+                    text.append(ch, style="astronaut.body")
+                continue
+
+            # (2) < and > are pole-top only on the finial row; otherwise astronaut body
+            if ch in ("<", ">"):
+                if is_finial_row:
+                    text.append(ch, style="pole.top")
+                else:
+                    text.append(ch, style="astronaut.body")
+                continue
+
+            # --- Existing logic (mostly unchanged) ---
+
+            # Ground remaining chars (like ^) on ground row
+            if ch in ground_chars:
+                text.append(ch, style="ground")
+                continue
+
+            # Pole body: only the two columns that make up the '||'
+            if ch == "|" and pole_start != -1 and col in (pole_start, pole_start + 1):
+                text.append(ch, style="pole.body")
+                continue
+
+            # Flag canton
+            if ch == ":" and has_flag_cloth and pole_start != -1 and col > pole_start + 1:
+                text.append(ch, style="flag.canton")
+                continue
+
+            # Flag stripes
+            if ch == "=" and stripe_style and pole_start != -1 and col > pole_start + 1:
+                text.append(ch, style=stripe_style)
+                continue
+
+            # USA letters
+            if ch == "U":
+                text.append(ch, style="usa.red")
+                continue
+            if ch == "S":
+                text.append(ch, style="usa.blue")
+                continue
+            if ch == "A":
+                text.append(ch, style="usa.red")
+                continue
+
+            if ch in "[]*":
+                text.append(ch, style="astronaut.detail")
+                continue
+
+            if ch.isspace():
+                text.append(ch)
+            else:
+                text.append(ch, style="astronaut.body")
+
+    console.print(text)
+
+def render_astronaut_startup_art_2() -> None:
+    highlight_chars = {"=", "*"}
+
+    lines = ASTRONAUT_STARTUP_ART2.splitlines()
+    text = Text()
+
+    for row, line in enumerate(lines):
+        if row > 0:
+            text.append("\n")
+
+        i = 0
+        while i < len(line):
+            if line.startswith("NASA", i):
+                text.append("N", style="nasa.red")
+                text.append("A", style="nasa.blue")
+                text.append("S", style="nasa.red")
+                text.append("A", style="nasa.blue")
+                i += 4
+                continue
+
+            ch = line[i]
+
+            if ch.isspace():
+                text.append(ch)
+            elif ch in highlight_chars:
+                text.append(ch, style="astro.metal")
+            else:
+                text.append(ch, style="astro.body")
+
+            i += 1
 
     console.print(text)

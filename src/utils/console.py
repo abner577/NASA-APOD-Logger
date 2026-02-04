@@ -25,7 +25,7 @@ DEEP_SPACE_THEME = Theme({
     "menu.key": "bold color(39)",
     "menu.text": "color(252)",
 
-    # SPACE_STARTUP_ART_1
+    # SPACE STARTUP ART
     "earth.land": "color(34)",       # dark green
     "earth.water": "on color(25)",   # muted blue ocean
 
@@ -38,19 +38,35 @@ DEEP_SPACE_THEME = Theme({
    "ship.flame.outer": "bold color(160)",
    "ship.flame.inner": "color(214)",
 
-  "ship.dots": "color(37)",
-  "ship.paren": "bold color(93)",
-  "ship.nasa.red": "bold color(160)",
-  "ship.nasa.blue": "bold color(39)",
+   "ship.dots": "color(37)",
+   "ship.paren": "bold color(93)",
+   "ship.nasa.red": "bold color(160)",
+   "ship.nasa.blue": "bold color(39)",
 
-  "sun.primary": "bold color(220)",
-  "star.purple": "color(93)",
-  "star.blue": "color(39)",
-  "star.muted": "dim color(250)",
-  "moon.body": "color(252)",
-  "nasa.red": "bold color(160)",
-  "nasa.blue": "bold color(27)"
+    # MOON STARTUP ART
+   "sun.primary": "bold color(220)",
+   "star.purple": "color(93)",
+   "star.blue": "color(39)",
+   "star.muted": "dim color(250)",
+   "moon.body": "color(252)",
+   "nasa.red": "bold color(160)",
+   "nasa.blue": "bold color(27)",
 
+    # ASTRONAUTS STARTUP ARTS
+   "flag.canton": "bold color(33)",
+   "flag.stripe.red": "bold color(160)",
+   "flag.stripe.white": "color(252)",
+   "pole.body": "color(245)",
+   "pole.top": "bold color(220)",
+   "astronaut.body": "color(152)",
+   "astronaut.detail": "dim color(109)",
+   "ground": "color(97)",
+   "usa.red": "bold color(160)",
+   "usa.blue": "bold color(39)",
+
+   "astro.body": "color(153)",
+   "astro.metal": "color(245)",
+   "astro.highlight": "color(252)",
 
 })
 
