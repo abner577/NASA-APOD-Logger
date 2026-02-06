@@ -1,6 +1,7 @@
 from src.utils.startup_utils import *
 from src.startup_art import *
 from src.config import *
+from src.commands import handle_main_menu_command
 
 """
 main.py
@@ -10,7 +11,7 @@ Responsible for the main menu loop and user interaction flow.
 """
 
 startup_banner2()
-# render func
+render_alien_startup_art_1()
 
 print("\n")
 print("-----------------------------------------------------------------------------\n")
@@ -58,6 +59,7 @@ print("> Toggle auto-open setting")
 
 print("\n-------------------------------------------------------------------------------\n")
 
+
 # Entry Prompt
 entry_flag = True
 while entry_flag:
@@ -75,34 +77,52 @@ while entry_flag:
     else:
         print("Invalid input: Please enter 1 or Q.")
 
-
 # Main Menu
 flag = True
 while flag:
     print("\n======================= Main Menu ☄️ =======================\n")
     increment_launch_count(int(get_launch_count()['launch_count']))
 
+    print("Commands: /help  /readme  /quit\n")
+
+    raw = input(
+        "[1] Make a NASA APOD Request\n"
+        "[2] View/Manage saved logs\n"
+        "[3] Change Setting\n"
+        "[4] Goodbye 👋\n\n"
+        "Option: "
+    ).strip()
+
+    # Phase 1: handle global commands only at Main Menu
+    cmd_result = handle_main_menu_command(raw)
+
+    # IMPORTANT: /help will clear the screen, print the help, and wait for Enter
+    # When it returns here, we should just re-render the Main Menu cleanly.
+    if cmd_result.handled:
+        if cmd_result.should_exit:
+            print("\nGoodbye 👋")
+            flag = False
+        continue
+
+    # Not a command
     try:
-        user_choice = int(input(
-            "[1] Make a NASA APOD Request\n"
-            "[2] View/Manage saved logs\n"
-            "[3] Change Setting\n"
-            "[4] Goodbye 👋\n\n"
-            "Option: "
-        ))
-
-        match user_choice:
-            case 1:
-                nasa_apods_menu()
-            case 2:
-                output_files_menu()
-            case 3:
-                user_settings_menu()
-            case 4:
-                print("\nGoodbye 👋")
-                flag = False
-
+        user_choice = int(raw)
     except ValueError:
-        print("Invalid input: Please enter a number from 1 to 4.")
+        print("Invalid input: Please enter a number from 1 to 4 (or type /help).\n")
+        continue
     except Exception as e:
         print(e)
+        continue
+
+    match user_choice:
+        case 1:
+            nasa_apods_menu()
+        case 2:
+            output_files_menu()
+        case 3:
+            user_settings_menu()
+        case 4:
+            print("\nGoodbye 👋")
+            flag = False
+        case _:
+            print("Invalid input: Please enter a number from 1 to 4 (or type /help).\n")

@@ -25,6 +25,8 @@ user_settings_name = "settings.jsonl"
 NASA_APOD_START_DATE = datetime.date(1995, 6, 16)
 DATE_TODAY = datetime.date.today()
 
+README_URL = "https://github.com/abner577/NASA-APOD-Logger/blob/main/README.md"
+
 
 SPACE_STARTUP_ART_1 = r"""
                   _-o#&&*''''?d:>b\_
